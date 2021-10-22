@@ -8,7 +8,7 @@
 
 GPU-accelerated image processing using [cupy](https://cupy.dev) and [CUDA](https://en.wikipedia.org/wiki/CUDA)
 
-![img.png](https://github.com/haesleinhuepf/napari-cupy-image-processing/raw/main/docs/screenshot.png)
+![img.png](https://github.com/haesleinhuepf/napari-cupy-image-processing/raw/main/docs/screencast.gif)
 
 ----------------------------------
 
@@ -20,6 +20,19 @@ Follow the [instructions for installing cupy](https://docs.cupy.dev/en/stable/in
 Afterwards, you can install `napari-cupy-image-processing` via [pip]:
 
     pip install napari-cupy-image-processing
+
+A more detailed example for installation (change 10.2 to your CUDA version):
+```
+conda create --name cupy_p38 python=3.8
+conda activate cupy_p38
+conda install -c conda-forge cupy cudatoolkit=10.2
+conda install napari
+pip install napari-cupy-image-processing
+```
+
+## Known issues
+
+When executing the first operation right after CUDA installation, napari may freeze and crash. Wait a minute and try again.
 
 ## Contributing
 
