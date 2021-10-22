@@ -48,6 +48,26 @@ def plugin_function(
 def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.gaussian_filter(image, sigma)
 
+@register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
+@plugin_function
+def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
+    # taken from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier9/_threshold_otsu.py#L41
+
+    minimum_intensity = image.min()
+    maximum_intensity = image.max()
+
+    range = maximum_intensity - minimum_intensity
+    bin_centers = cupy.arange(256) * range / (255)
+
+    histogram, _ = cupy.histogram(image, bins=256, range=(minimum_intensity, maximum_intensity))
+    from skimage.filters import threshold_otsu
+
+    threshold = threshold_otsu(hist=(histogram, bin_centers))
+
+    return image > threshold
+
+
+
 @register_function(menu="Segmentation > Connected component labeling (cupy)")
 @plugin_function
 def label(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
