@@ -67,7 +67,6 @@ def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.typ
     return cupyx.scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
 
 
-
 @register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
 @plugin_function
 def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
@@ -85,6 +84,12 @@ def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
     threshold = threshold_otsu(hist=(histogram, bin_centers))
 
     return image > threshold
+
+
+@register_function(menu="Segmentation > Binary fill holes (cupy)")
+@plugin_function
+def threshold_otsu(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
+    return cupyx.scipy.ndimage.binary_fill_holes(binary_image)
 
 
 @register_function(menu="Segmentation > Connected component labeling (cupy)")
