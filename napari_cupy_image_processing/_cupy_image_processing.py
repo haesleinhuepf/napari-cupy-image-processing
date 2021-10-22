@@ -68,6 +68,12 @@ def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.typ
     return cupyx.scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
 
 
+@register_function(menu="Filtering > Morphological Gradient (cupy)")
+@plugin_function
+def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
+
+
 @register_function(menu="Filtering > Morphological Laplace (cupy)")
 @plugin_function
 def morphological_laplace(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
