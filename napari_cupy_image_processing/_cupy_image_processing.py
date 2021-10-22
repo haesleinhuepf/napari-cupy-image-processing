@@ -6,6 +6,7 @@ import numpy as np
 import cupy
 import cupyx
 from cupyx.scipy import ndimage
+from cupyx.scipy import signal
 import napari
 from napari_tools_menu import register_function
 
@@ -35,7 +36,7 @@ def plugin_function(
 
         # call the decorated function
         result = function(*bound.args, **bound.kwargs)
-        print("Result is ", str(type(result)))
+
         if isinstance(result, cupy.ndarray):
             return np.asarray(result.get())
         else:
@@ -78,6 +79,12 @@ def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> 
 @plugin_function
 def morphological_laplace(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.morphological_laplace(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Wiener (cupy)")
+@plugin_function
+def wiener(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return signal.wiener(image.astype(float), radius * 2 + 1)
 
 
 @register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
