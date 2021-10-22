@@ -43,10 +43,12 @@ def plugin_function(
 
     return worker_function
 
+
 @register_function(menu="Filtering > Gaussian filter (cupy)")
 @plugin_function
 def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.gaussian_filter(image, sigma)
+
 
 @register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
 @plugin_function
@@ -65,7 +67,6 @@ def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
     threshold = threshold_otsu(hist=(histogram, bin_centers))
 
     return image > threshold
-
 
 
 @register_function(menu="Segmentation > Connected component labeling (cupy)")
