@@ -6,19 +6,13 @@
 [![tests](https://github.com/haesleinhuepf/napari-cupy-image-processing/workflows/tests/badge.svg)](https://github.com/haesleinhuepf/napari-cupy-image-processing/actions)
 [![codecov](https://codecov.io/gh/haesleinhuepf/napari-cupy-image-processing/branch/master/graph/badge.svg)](https://codecov.io/gh/haesleinhuepf/napari-cupy-image-processing)
 
-GPU-accelerated image processing using CUDA
+GPU-accelerated image processing using [cupy](https://cupy.dev) and [CUDA](https://en.wikipedia.org/wiki/CUDA)
+
+![img.png](docs/screenshot.png)
 
 ----------------------------------
 
 This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
-
-<!--
-Don't miss the full getting started guide to set up your new package:
-https://github.com/napari/cookiecutter-napari-plugin#getting-started
-
-and review the napari docs for plugin developers:
-https://napari.org/docs/plugins/index.html
--->
 
 ## Installation
 
