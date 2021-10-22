@@ -56,10 +56,16 @@ def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.
     return cupyx.scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
+@register_function(menu="Filtering > Median filter (cupy)")
+@plugin_function
+def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
+
+
 @register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
 @plugin_function
 def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
-    # taken from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier9/_threshold_otsu.py#L41
+    # adapted from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier9/_threshold_otsu.py#L41
 
     minimum_intensity = image.min()
     maximum_intensity = image.max()
