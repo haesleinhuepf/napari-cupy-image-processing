@@ -47,7 +47,13 @@ def plugin_function(
 @register_function(menu="Filtering > Gaussian filter (cupy)")
 @plugin_function
 def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.gaussian_filter(image, sigma)
+    return cupyx.scipy.ndimage.gaussian_filter(image.astype(float), sigma)
+
+
+@register_function(menu="Filtering > Gaussian Laplace (cupy)")
+@plugin_function
+def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
 @register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
