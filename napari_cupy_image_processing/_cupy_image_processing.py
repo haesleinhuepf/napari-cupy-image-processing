@@ -63,6 +63,12 @@ def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.ty
     return cupyx.scipy.ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
 
 
+@register_function(menu="Filtering > Remove noise (Percentile filter, cupy)")
+@plugin_function
+def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=radius * 2 + 1)
+
+
 @register_function(menu="Filtering > Remove background (White top hat, cupy)")
 @plugin_function
 def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
