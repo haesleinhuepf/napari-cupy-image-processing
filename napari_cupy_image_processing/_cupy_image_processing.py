@@ -56,10 +56,16 @@ def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.
     return cupyx.scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
-@register_function(menu="Filtering > Median filter (cupy)")
+@register_function(menu="Filtering > Remove noise (Median filter, cupy)")
 @plugin_function
 def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
+
+@register_function(menu="Filtering > Remove background (White top hat, cupy)")
+@plugin_function
+def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
+
 
 
 @register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
