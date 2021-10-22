@@ -8,7 +8,7 @@
 
 GPU-accelerated image processing using [cupy](https://cupy.dev) and [CUDA](https://en.wikipedia.org/wiki/CUDA)
 
-![img.png](docs/screenshot.png)
+![img.png](https://github.com/haesleinhuepf/napari-cupy-image-processing/raw/main/docs/screenshot.png)
 
 ----------------------------------
 
@@ -23,7 +23,10 @@ Afterwards, you can install `napari-cupy-image-processing` via [pip]:
 
 ## Contributing
 
-Contributions are very welcome. Tests can be run with [tox], please ensure
+Contributions are very welcome. Adding [cupy ndimage](https://docs.cupy.dev/en/stable/reference/ndimage.html) functions is quite easy as you can see in the 
+[implementation of the current operations](https://github.com/haesleinhuepf/napari-cupy-image-processing/blob/main/napari_cupy_image_processing/_cupy_image_processing.py#L48). 
+If you need another function in napari, just send a PR.
+Tests can be run with [tox], please ensure
 the coverage at least stays the same before you submit a pull request.
 
 ## License
