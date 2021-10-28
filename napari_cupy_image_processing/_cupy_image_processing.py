@@ -45,7 +45,7 @@ def plugin_function(
     return worker_function
 
 
-@register_function(menu="Filtering > Gaussian filter (cupy)")
+@register_function(menu="Filtering > Gaussian (cupy)")
 @plugin_function
 def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.gaussian_filter(image.astype(float), sigma)
@@ -57,22 +57,40 @@ def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.
     return cupyx.scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
-@register_function(menu="Filtering > Remove noise (Median filter, cupy)")
+@register_function(menu="Filtering > Median (cupy)")
 @plugin_function
 def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Remove noise (Percentile filter, cupy)")
+@register_function(menu="Filtering > Percentile (cupy)")
 @plugin_function
 def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Remove background (White top hat, cupy)")
+@register_function(menu="Filtering > Top-hat (white, cupy)")
 @plugin_function
 def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
     return cupyx.scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Top-hat (black, cupy)")
+@plugin_function
+def black_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Minimum (cupy)")
+@plugin_function
+def minimum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Maximum (cupy)")
+@plugin_function
+def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return cupyx.scipy.ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering > Morphological Gradient (cupy)")

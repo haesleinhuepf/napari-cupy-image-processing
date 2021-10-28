@@ -7,6 +7,6 @@ from napari_plugin_engine import napari_hook_implementation
 # (The functions themselves are defined below)
 @napari_hook_implementation
 def napari_experimental_provide_function():
-    from ._cupy_image_processing import gaussian_filter, gaussian_laplace, median_filter, percentile_filter, white_tophat, morphological_gradient, morphological_laplace, wiener, threshold_otsu, binary_fill_holes, label
-    return [gaussian_filter, gaussian_laplace, median_filter, percentile_filter, white_tophat, morphological_gradient, morphological_laplace, wiener, threshold_otsu, binary_fill_holes, label]
+    from ._cupy_image_processing import gaussian_filter, gaussian_laplace, median_filter, percentile_filter, white_tophat, morphological_gradient, morphological_laplace, wiener, threshold_otsu, binary_fill_holes, label, black_tophat, minimum_filter, maximum_filter
+    return [gaussian_filter, gaussian_laplace, median_filter, percentile_filter, white_tophat, morphological_gradient, morphological_laplace, wiener, threshold_otsu, binary_fill_holes, label, black_tophat, minimum_filter, maximum_filter]
 
