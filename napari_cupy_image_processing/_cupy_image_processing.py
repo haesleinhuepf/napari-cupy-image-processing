@@ -111,7 +111,7 @@ def wiener(image: napari.types.ImageData, radius: float = 2) -> napari.types.Ima
     return signal.wiener(image.astype(float), radius * 2 + 1)
 
 
-@register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image + cupy)")
+@register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image, cupy)")
 @plugin_function
 def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
     # adapted from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier9/_threshold_otsu.py#L41
@@ -134,6 +134,30 @@ def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
 @plugin_function
 def binary_fill_holes(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
     return cupyx.scipy.ndimage.binary_fill_holes(binary_image)
+
+
+@register_function(menu="Segmentation > Binary erosion (cupy)")
+@plugin_function
+def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    return cupyx.scipy.ndimage.binary_erosion(binary_image, iterations=iterations, brute_force=True)
+
+
+@register_function(menu="Segmentation > Binary dilation (cupy)")
+@plugin_function
+def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    return cupyx.scipy.ndimage.binary_dilation(binary_image, iterations=iterations, brute_force=True)
+
+
+@register_function(menu="Segmentation > Binary closing (cupy)")
+@plugin_function
+def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    return cupyx.scipy.ndimage.binary_closing(binary_image, iterations=iterations, brute_force=True)
+
+
+@register_function(menu="Segmentation > Binary opening (cupy)")
+@plugin_function
+def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    return cupyx.scipy.ndimage.binary_opening(binary_image, iterations=iterations, brute_force=True)
 
 
 @register_function(menu="Segmentation > Connected component labeling (cupy)")
