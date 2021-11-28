@@ -31,8 +31,9 @@ def plugin_function(
         for key, value in bound.arguments.items():
             if isinstance(value, np.ndarray):
                 bound.arguments[key] = cupy.asarray(value)
-            elif 'pyclesperanto_prototype._tier0._pycl.OCLArray' in str(type(value)):
-                # compatibility with pyclesperanto
+            elif 'pyclesperanto_prototype._tier0._pycl.OCLArray' in str(type(value)) or \
+                'dask.array.core.Array' in str(type(value)):
+                # compatibility with pyclesperanto and dask
                 bound.arguments[key] = cupy.asarray(np.asarray(value))
 
         # call the decorated function
