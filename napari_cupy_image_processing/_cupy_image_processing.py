@@ -43,6 +43,7 @@ def plugin_function(
             return np.asarray(result.get())
         else:
             return result
+    worker_function.__module__ = "napari_cupy_image_processing"
 
     return worker_function
 
