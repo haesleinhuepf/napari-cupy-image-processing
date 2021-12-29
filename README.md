@@ -5,6 +5,9 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/napari-cupy-image-processing.svg?color=green)](https://python.org)
 [![tests](https://github.com/haesleinhuepf/napari-cupy-image-processing/workflows/tests/badge.svg)](https://github.com/haesleinhuepf/napari-cupy-image-processing/actions)
 [![codecov](https://codecov.io/gh/haesleinhuepf/napari-cupy-image-processing/branch/master/graph/badge.svg)](https://codecov.io/gh/haesleinhuepf/napari-cupy-image-processing)
+[![Development Status](https://img.shields.io/pypi/status/napari-cupy-image-processing.svg)](https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha)
+[![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-cupy-image-processing)](https://napari-hub.org/plugins/napari-cupy-image-processing)
+
 
 GPU-accelerated image processing using [cupy](https://cupy.dev) and [CUDA](https://en.wikipedia.org/wiki/CUDA)
 
