@@ -1,3 +1,4 @@
+import warnings
 from typing import Callable
 from functools import wraps
 from toolz import curry
@@ -219,3 +220,68 @@ def label(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -
     result, _ = ndimage.label(binary_image)
     return result
 
+
+@register_function(menu="Measurement > Measurements (n-cupy)")
+def measurements(image_layer : napari.layers.Layer,
+                 labels_layer: napari.layers.Labels,
+                 napari_viewer : napari.Viewer,
+                 size: bool = True,
+                 intensity: bool = True,
+                 position: bool = False):
+    import cupy
+    from cupyx.scipy import ndimage
+
+    if image_layer is not None and labels_layer is not None:
+
+        labels = cupy.asarray(labels_layer.data)
+        image = cupy.asarray(image_layer.data).astype(np.float32)
+
+        df = {}
+
+        for l in range(1, labels.max().get() + 1):
+            if position:
+                for i, x in enumerate(ndimage.center_of_mass(image, labels, l)):
+                    _append_to_column(df, "center_of_mass_" + str(i), x.get())
+                for i, x in enumerate(ndimage.minimum_position(image, labels, l)):
+                    _append_to_column(df, "minimum_position_" + str(i), x)
+                for i, x in enumerate(ndimage.maximum_position(image, labels, l)):
+                    _append_to_column(df, "maximum_position_" + str(i), x)
+
+            mean = None
+            if intensity:
+                x = ndimage.mean(image, labels, l)
+                mean = x.get()
+                _append_to_column(df, "mean", x.get())
+                x = ndimage.minimum(image, labels, l)
+                _append_to_column(df, "minimum", x.get())
+                x = ndimage.maximum(image, labels, l)
+                _append_to_column(df, "maximum", x.get())
+                x = ndimage.median(image, labels, l)
+                _append_to_column(df, "median", x.get())
+                x = ndimage.standard_deviation(image, labels, l)
+                _append_to_column(df, "standard_deviation", x.get())
+
+            if size:
+                sum_labels = ndimage.sum_labels(image, labels, l).get()
+                if mean is None:
+                    mean = ndimage.mean(image, labels, l).get()
+                pixel_count = sum_labels / mean
+                _append_to_column(df, "pixel_count", pixel_count)
+
+        result = {}
+        for k, v in df.items():
+            result[k] = np.asarray(v).tolist()
+
+        # Store results in the properties dictionary:
+        labels_layer.properties = result
+
+        # turn table into a widget
+        from napari_skimage_regionprops import add_table
+        add_table(labels_layer, napari_viewer)
+    else:
+        warnings.warn("Image and labels must be set.")
+
+def _append_to_column(dictionary, column_name, value):
+    if column_name not in dictionary.keys():
+        dictionary[column_name] = []
+    dictionary[column_name].append(value)

@@ -41,9 +41,11 @@ When executing the first operation right after CUDA installation, napari may fre
 
 Contributions are very welcome. Adding [cupy ndimage](https://docs.cupy.dev/en/stable/reference/ndimage.html) functions is quite easy as you can see in the 
 [implementation of the current operations](https://github.com/haesleinhuepf/napari-cupy-image-processing/blob/main/napari_cupy_image_processing/_cupy_image_processing.py#L48). 
-If you need another function in napari, just send a PR.
-Tests can be run with [tox], please ensure
-the coverage at least stays the same before you submit a pull request.
+If you need another function in napari, just send a PR. Please make sure the tests pass locally before submitting a PR.
+
+```
+pytest --cov=napari_cupy_image_processing
+```
 
 ## License
 

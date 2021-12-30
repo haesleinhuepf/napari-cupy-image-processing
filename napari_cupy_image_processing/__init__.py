@@ -3,6 +3,7 @@ __version__ = "0.1.8"
 __common_alias__ = "ncupy"
 
 from ._cupy_image_processing import \
+    plugin_function, \
     gaussian_filter, \
     gaussian_laplace, \
     median_filter, \
@@ -20,6 +21,7 @@ from ._cupy_image_processing import \
     binary_closing, \
     binary_erosion, \
     binary_opening, \
-    binary_dilation
+    binary_dilation, \
+    measurements
 
 from ._function import napari_experimental_provide_function

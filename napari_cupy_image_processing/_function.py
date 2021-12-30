@@ -24,7 +24,8 @@ def napari_experimental_provide_function():
         binary_closing, \
         binary_erosion, \
         binary_opening, \
-        binary_dilation
+        binary_dilation, \
+        measurements
     return [gaussian_filter,
             gaussian_laplace,
             median_filter,
@@ -42,5 +43,6 @@ def napari_experimental_provide_function():
             binary_closing,
             binary_erosion,
             binary_opening,
-            binary_dilation]
+            binary_dilation,
+            measurements]
 
