@@ -44,6 +44,7 @@ Contributions are very welcome. Adding [cupy ndimage](https://docs.cupy.dev/en/s
 If you need another function in napari, just send a PR. Please make sure the tests pass locally before submitting a PR.
 
 ```
+pip install pytest-cov pytest-qt
 pytest --cov=napari_cupy_image_processing
 ```
 
