@@ -3,10 +3,6 @@ from functools import wraps
 from toolz import curry
 import inspect
 import numpy as np
-import cupy
-import cupyx
-from cupyx.scipy import ndimage
-from cupyx.scipy import signal
 import napari
 from napari_tools_menu import register_function
 from napari_time_slicer import time_slicer
@@ -18,6 +14,8 @@ def plugin_function(
     # copied from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier0/_plugin_function.py
     @wraps(function)
     def worker_function(*args, **kwargs):
+        import cupy
+
         sig = inspect.signature(function)
         # create mapping from position and keyword arguments to parameters
         # will raise a TypeError if the provided arguments do not match the signature
@@ -52,76 +50,97 @@ def plugin_function(
 @time_slicer
 @plugin_function
 def gaussian_filter(image: napari.types.ImageData, sigma: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.gaussian_filter(image.astype(float), sigma)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.gaussian_filter(image.astype(float), sigma)
 
 
 @register_function(menu="Filtering / edge enhancement > Gaussian Laplace (n-cupy)")
 @time_slicer
 @plugin_function
 def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
 @register_function(menu="Filtering / noise removal > Median (n-cupy)")
 @time_slicer
 @plugin_function
 def median_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / noise removal > Percentile (n-cupy)")
 @time_slicer
 @plugin_function
 def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.percentile_filter(image.astype(float), percentile=percentile, size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / background removal > White Top-hat (n-cupy)")
 @time_slicer
 @plugin_function
 def white_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / background removal > Black top-hat (n-cupy)")
 @time_slicer
 @plugin_function
 def black_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / background removal > Minimum (n-cupy)")
 @time_slicer
 @plugin_function
 def minimum_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / background removal > Maximum (n-cupy)")
 @time_slicer
 @plugin_function
 def maximum_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / background removal > Morphological Gradient (n-cupy)")
 @time_slicer
 @plugin_function
 def morphological_gradient(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering > Morphological Laplace (n-cupy)")
 @time_slicer
 @plugin_function
 def morphological_laplace(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return cupyx.scipy.ndimage.morphological_laplace(image.astype(float), size=radius * 2 + 1)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.morphological_laplace(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / noise removal > Wiener (n-cupy)")
 @time_slicer
 @plugin_function
 def wiener(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
+    from cupyx.scipy import signal
     return signal.wiener(image.astype(float), radius * 2 + 1)
 
 
@@ -130,6 +149,7 @@ def wiener(image: napari.types.ImageData, radius: float = 2, viewer: napari.View
 @plugin_function
 def threshold_otsu(image: napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     # adapted from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier9/_threshold_otsu.py#L41
+    import cupy
 
     minimum_intensity = image.min()
     maximum_intensity = image.max()
@@ -149,41 +169,53 @@ def threshold_otsu(image: napari.types.ImageData, viewer: napari.Viewer = None) 
 @time_slicer
 @plugin_function
 def binary_fill_holes(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    return cupyx.scipy.ndimage.binary_fill_holes(binary_image)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.binary_fill_holes(binary_image)
 
 
 @register_function(menu="Segmentation post-processing > Binary erosion (n-cupy)")
 @time_slicer
 @plugin_function
 def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    return cupyx.scipy.ndimage.binary_erosion(binary_image, iterations=iterations, brute_force=True)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.binary_erosion(binary_image, iterations=iterations, brute_force=True)
 
 
 @register_function(menu="Segmentation post-processing > Binary dilation (n-cupy)")
 @time_slicer
 @plugin_function
 def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    return cupyx.scipy.ndimage.binary_dilation(binary_image, iterations=iterations, brute_force=True)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.binary_dilation(binary_image, iterations=iterations, brute_force=True)
 
 
 @register_function(menu="Segmentation post-processing > Binary closing (n-cupy)")
 @time_slicer
 @plugin_function
 def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    return cupyx.scipy.ndimage.binary_closing(binary_image, iterations=iterations, brute_force=True)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.binary_closing(binary_image, iterations=iterations, brute_force=True)
 
 
 @register_function(menu="Segmentation post-processing > Binary opening (n-cupy)")
 @time_slicer
 @plugin_function
 def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    return cupyx.scipy.ndimage.binary_opening(binary_image, iterations=iterations, brute_force=True)
+    import cupyx
+    from cupyx.scipy import ndimage
+    return ndimage.binary_opening(binary_image, iterations=iterations, brute_force=True)
 
 
 @register_function(menu="Segmentation / labeling > Connected component labeling (n-cupy)")
 @time_slicer
 @plugin_function
 def label(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    result, _ = cupyx.scipy.ndimage.label(binary_image)
+    import cupyx
+    from cupyx.scipy import ndimage
+    result, _ = ndimage.label(binary_image)
     return result
 
