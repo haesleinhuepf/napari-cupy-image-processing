@@ -239,6 +239,7 @@ def measurements(image_layer : napari.layers.Layer,
         df = {}
 
         for l in range(1, labels.max().get() + 1):
+            _append_to_column(df, "label", l)
             if position:
                 for i, x in enumerate(ndimage.center_of_mass(image, labels, l)):
                     _append_to_column(df, "center_of_mass_" + str(i), x.get())
