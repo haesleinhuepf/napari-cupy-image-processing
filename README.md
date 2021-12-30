@@ -48,7 +48,10 @@ the coverage at least stays the same before you submit a pull request.
 ## License
 
 Distributed under the terms of the [MIT] license,
-"napari-cupy-image-processing" is free and open source software
+"napari-cupy-image-processing" is free and open source software.
+
+Some marked code snippets have been copied from [rapidsai/cucim](https://github.com/rapidsai/cucim). Hence, please respect
+the correesponding [Apache 2.0 license](thirdparty_licenses/license_cucim).
 
 ## Issues
 

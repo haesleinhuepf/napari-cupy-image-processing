@@ -219,3 +219,70 @@ def label(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -
     result, _ = ndimage.label(binary_image)
     return result
 
+
+@register_function(menu="Filtering / deconvolution > Richardson-Lucy (n-cupy)")
+@time_slicer
+@plugin_function
+def richardson_lucy_deconvolution(image : napari.types.ImageData, psf: napari.types.ImageData, iterations: int = 50,
+                    clip: bool = True, filter_epsilon: float = None):
+    """Richardson-Lucy deconvolution.
+
+    The code for this function has been adapted from rapidsai/cucim [2]. It is Apache 2.0 licensed.
+
+    Parameters
+    ----------
+    image : ndarray
+       Input degraded image (can be N dimensional).
+    psf : ndarray
+       The point spread function.
+    iterations : int, optional
+       Number of iterations. This parameter plays the role of
+       regularisation.
+    clip : boolean, optional
+       True by default. If true, pixel value of the result above 1 or
+       under -1 are thresholded for skimage pipeline compatibility.
+    filter_epsilon: float, optional
+       Value below which intermediate results become 0 to avoid division
+       by small numbers.
+
+    Returns
+    -------
+    im_deconv : ndarray
+       The deconvolved image.
+
+    References
+    ----------
+    .. [1] https://en.wikipedia.org/wiki/Richardson%E2%80%93Lucy_deconvolution
+    .. [2] https://github.com/rapidsai/cucim/blob/ab8e6a41994a543703b2c7a857251e50966115a5/python/cucim/src/cucim/skimage/restoration/deconvolution.py#L375
+    """
+    import cupy as cp
+    from cupyx.scipy import signal
+    from cupyx.scipy import ndimage
+
+    def _float_dtype(image):
+        if image.dtype.kind != 'f':
+            return cp.float64
+        return cp.result_type(image.dtype, cp.float32)
+
+    if filter_epsilon == 0.0:
+        filter_epsilon = None
+
+    float_type = _float_dtype(image)
+    image = image.astype(float_type, copy=False)
+    psf = psf.astype(float_type, copy=False)
+    im_deconv = cp.full(image.shape, 0.5, dtype=float_type)
+    psf_mirror = cp.ascontiguousarray(psf[::-1, ::-1])
+
+    for _ in range(iterations):
+        conv = ndimage.convolve(im_deconv, psf, mode='nearest')
+        if filter_epsilon:
+            relative_blur = cp.where(conv < filter_epsilon, 0, image / conv)
+        else:
+            relative_blur = image / conv
+        im_deconv *= ndimage.convolve(relative_blur, psf_mirror, mode='nearest')
+
+    if clip:
+        im_deconv[im_deconv > 1] = 1
+        im_deconv[im_deconv < -1] = -1
+
+    return im_deconv
