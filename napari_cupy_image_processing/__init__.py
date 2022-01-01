@@ -1,5 +1,5 @@
 
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 __common_alias__ = "ncupy"
 
 from ._cupy_image_processing import \
