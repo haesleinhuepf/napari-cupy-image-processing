@@ -222,19 +222,19 @@ def label(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -
 
 
 @register_function(menu="Measurement > Measurements (n-cupy)")
-def measurements(image_layer : napari.layers.Layer,
-                 labels_layer: napari.layers.Labels,
-                 napari_viewer : napari.Viewer,
+def measurements(intensity_image: napari.types.ImageData,
+                 label_image: napari.types.LabelsData,
+                 napari_viewer : napari.Viewer = None,
                  size: bool = True,
                  intensity: bool = True,
                  position: bool = False):
     import cupy
     from cupyx.scipy import ndimage
 
-    if image_layer is not None and labels_layer is not None:
+    if intensity_image is not None and label_image is not None:
 
-        labels = cupy.asarray(labels_layer.data)
-        image = cupy.asarray(image_layer.data).astype(np.float32)
+        labels = cupy.asarray(label_image)
+        image = cupy.asarray(intensity_image).astype(np.float32)
 
         df = {}
 
@@ -273,12 +273,17 @@ def measurements(image_layer : napari.layers.Layer,
         for k, v in df.items():
             result[k] = np.asarray(v).tolist()
 
-        # Store results in the properties dictionary:
-        labels_layer.properties = result
+        if napari_viewer is not None:
+            from napari_workflows._workflow import _get_layer_from_data
+            labels_layer = _get_layer_from_data(napari_viewer, label_image)
+            # Store results in the properties dictionary:
+            labels_layer.properties = result
 
-        # turn table into a widget
-        from napari_skimage_regionprops import add_table
-        add_table(labels_layer, napari_viewer)
+            # turn table into a widget
+            from napari_skimage_regionprops import add_table
+            add_table(labels_layer, napari_viewer)
+        else:
+            return result
     else:
         warnings.warn("Image and labels must be set.")
 

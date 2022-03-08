@@ -68,7 +68,7 @@ def test_measurements(make_napari_viewer):
     image_layer = viewer.add_image(image)
     labels_layer = viewer.add_labels(labels)
 
-    measurements(image_layer, labels_layer, viewer, size=True, intensity=True, position=True)
+    measurements(image_layer.data, labels_layer.data, viewer, size=True, intensity=True, position=True)
     result = labels_layer.properties
 
 
