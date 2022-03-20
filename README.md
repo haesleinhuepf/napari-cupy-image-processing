@@ -13,7 +13,7 @@ GPU-accelerated image processing using [cupy](https://cupy.dev) and [CUDA](https
 
 ## Usage
 
-This napari plugin adds some menu entries to the Tools menu. You can recognize them with their `(n-cupy)` in brackets behind.
+This napari plugin adds some menu entries to the Tools menu. You can recognize them with their suffix `(n-cupy)` in brackets.
 Furthermore, it can be used from the [napari-assistant](https://www.napari-hub.org/plugins/napari-assistant) graphical user interface. 
 Therefore, just click the menu `Tools > Utilities > Assistant (na)` or run `naparia` from the command line.
 
