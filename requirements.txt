@@ -9,4 +9,5 @@ napari-tools-menu
 scikit-image
 napari-time-slicer
 napari-skimage-regionprops
+napari-assistant
 -e .
