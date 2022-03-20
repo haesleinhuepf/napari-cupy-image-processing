@@ -11,11 +11,15 @@
 
 GPU-accelerated image processing using [cupy](https://cupy.dev) and [CUDA](https://en.wikipedia.org/wiki/CUDA)
 
-![img.png](https://github.com/haesleinhuepf/napari-cupy-image-processing/raw/main/docs/screencast.gif)
+## Usage
 
-----------------------------------
+This napari plugin adds some menu entries to the Tools menu. You can recognize them with their `(n-cupy)` in brackets behind.
+Furthermore, it can be used from the [napari-assistant](https://www.napari-hub.org/plugins/napari-assistant) graphical user interface. 
+Therefore, just click the menu `Tools > Utilities > Assistant (na)` or run `naparia` from the command line.
 
-This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
+![img.png](https://github.com/haesleinhuepf/napari-cupy-image-processing/raw/main/docs/screenshot-with-tools-menu.png)
+
+You can also call operations from python, e.g. as shown in this [demo notebook](https://github.com/haesleinhuepf/napari-cupy-image-processing/raw/main/docs/demo.ipynb).
 
 ## Installation
 
@@ -24,18 +28,13 @@ Afterwards, you can install `napari-cupy-image-processing` via [pip]:
 
     pip install napari-cupy-image-processing
 
-A more detailed example for installation (change 10.2 to your CUDA version):
+A more detailed example for installation (change 11.2 to your desired CUDA version):
 ```
-conda create --name cupy_p38 python=3.8
-conda activate cupy_p38
-conda install -c conda-forge cupy cudatoolkit=10.2
-conda install napari
+conda create --name cupy_p39 python=3.9
+conda activate cupy_p39
+conda install -c conda-forge cupy cudatoolkit=11.2 napari
 pip install napari-cupy-image-processing
 ```
-
-## Known issues
-
-When executing the first operation right after CUDA installation, napari may freeze and crash. Wait a minute and try again.
 
 ## Contributing
 
@@ -47,6 +46,8 @@ If you need another function in napari, just send a PR. Please make sure the tes
 pip install pytest-cov pytest-qt
 pytest --cov=napari_cupy_image_processing
 ```
+
+This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.
 
 ## License
 
