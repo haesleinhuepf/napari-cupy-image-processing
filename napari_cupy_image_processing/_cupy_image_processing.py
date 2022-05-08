@@ -231,6 +231,13 @@ def measurements(intensity_image: napari.types.ImageData,
     import cupy
     from cupyx.scipy import ndimage
 
+    from warnings import warn
+    warn(
+        'napari-cupy-image-processing measurements() is deprecated. Consider switching to napari-simpleitk-image-processing label_statistics()',
+        DeprecationWarning)
+    print(
+        'napari-cupy-image-processing measurements() is deprecated. Consider switching to napari-simpleitk-image-processing label_statistics()')
+
     if intensity_image is not None and label_image is not None:
 
         labels = cupy.asarray(label_image)
