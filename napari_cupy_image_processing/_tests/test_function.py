@@ -68,9 +68,9 @@ def test_measurements(make_napari_viewer):
     image_layer = viewer.add_image(image)
     labels_layer = viewer.add_labels(labels)
 
-    measurements(image_layer.data, labels_layer.data, viewer, size=True, intensity=True, position=True)
-    result = labels_layer.properties
+    result = measurements(image_layer.data, labels_layer.data, size=True, intensity=True, position=True)
 
+    print(list(result.keys()))
 
     reference = {'center_of_mass_0': [0.5, 0.5, 0.5, 2.0, 3.0],
                  'center_of_mass_1': [1.0, 2.0, 3.0, 1.5, 0.5],
@@ -83,7 +83,8 @@ def test_measurements(make_napari_viewer):
                  'maximum': [1, 2, 3, 4, 5],
                  'median': [1.0, 2.0, 3.0, 4.0, 5.0],
                  'standard_deviation': [0.0, 0.0, 0.0, 0.0, 0.0],
-                 'pixel_count': [2.0, 2.0, 2.0, 4.0, 2.0]}
+                 'pixel_count': [2.0, 2.0, 2.0, 4.0, 2.0],
+                 'label': [1,2,3,4,5]}
 
     for k, v in result.items():
         assert np.allclose(result[k], reference[k], 0.001)
