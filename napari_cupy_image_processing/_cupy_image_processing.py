@@ -50,8 +50,25 @@ def plugin_function(
 @register_function(menu="Filtering / noise removal > Gaussian (n-cupy)")
 @time_slicer
 @plugin_function
-def gaussian_filter(image: napari.types.ImageData, sigma: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+    """
+    Apply Gaussian-blur to an image to locally average intensity (weighted) and remove noise.
+
+    Parameters
+    ----------
+    image: array-like
+        Image to remove noise
+    sigma: float
+        The higher the sigma the more details in the image will be lost.
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Gaussian_blur
+    """
     from cupyx.scipy import ndimage
     return ndimage.gaussian_filter(image.astype(float), sigma)
 
@@ -59,8 +76,25 @@ def gaussian_filter(image: napari.types.ImageData, sigma: float = 2, viewer: nap
 @register_function(menu="Filtering / edge enhancement > Gaussian Laplace (n-cupy)")
 @time_slicer
 @plugin_function
-def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+    """
+    Apply Laplace filter for edge detection / edge enhancement after applying a Gaussian-blur
+
+    Parameters
+    ----------
+    image: array-like
+        Image to detect edges in
+    sigma: float
+        The filter will be applied with this specified Gaussian-blur sigma
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Laplace_operator
+    """
     from cupyx.scipy import ndimage
     return ndimage.gaussian_laplace(image.astype(float), sigma)
 
@@ -68,8 +102,14 @@ def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2, viewer: na
 @register_function(menu="Filtering / noise removal > Median (n-cupy)")
 @time_slicer
 @plugin_function
-def median_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    The median-filter allows removing noise from images. While locally averaging intensity, it
+    is an edge-preserving filter.
+
+    It is equal to a percentile-filter with percentile==50.
+    In case applying the filter takes to much time, consider using a Gaussian blur instead.
+    """
     from cupyx.scipy import ndimage
     return ndimage.median_filter(image.astype(float), size=radius * 2 + 1)
 
@@ -77,8 +117,10 @@ def median_filter(image: napari.types.ImageData, radius: float = 2, viewer: napa
 @register_function(menu="Filtering / noise removal > Percentile (n-cupy)")
 @time_slicer
 @plugin_function
-def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2) -> napari.types.ImageData:
+    """The percentile filter is similar to the median-filter but it allows specifying the percentile.
+    The percentile-filter with percentile==50 is equal to the median-filter.
+    """
     from cupyx.scipy import ndimage
     return ndimage.percentile_filter(image.astype(float), percentile=percentile, size=radius * 2 + 1)
 
@@ -86,8 +128,12 @@ def percentile_filter(image: napari.types.ImageData, percentile : float = 50, ra
 @register_function(menu="Filtering / background removal > White Top-hat (n-cupy)")
 @time_slicer
 @plugin_function
-def white_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    The white top-hat filter removes bright regions from an image showing black islands.
+
+    In the context of fluorescence microscopy, it allows removing intensity resulting from out-of-focus light.
+    """
     from cupyx.scipy import ndimage
     return ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
 
@@ -95,8 +141,10 @@ def white_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napar
 @register_function(menu="Filtering / background removal > Black top-hat (n-cupy)")
 @time_slicer
 @plugin_function
-def black_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def black_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    The black top-hat filter removes bright regions from an image showing black islands.
+    """
     from cupyx.scipy import ndimage
     return ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
 
@@ -104,8 +152,12 @@ def black_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napar
 @register_function(menu="Filtering / background removal > Minimum (n-cupy)")
 @time_slicer
 @plugin_function
-def minimum_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def minimum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Local minimum filter
+    
+    Can be used for noise and background removal.
+    """
     from cupyx.scipy import ndimage
     return ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
 
@@ -113,26 +165,68 @@ def minimum_filter(image: napari.types.ImageData, radius: float = 2, viewer: nap
 @register_function(menu="Filtering / background removal > Maximum (n-cupy)")
 @time_slicer
 @plugin_function
-def maximum_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Local maximum filter 
+    
+    In the context of cell segmentation it can be used to make membranes wider 
+    and close small gaps of insufficient staining.
+    """
     from cupyx.scipy import ndimage
     return ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering / background removal > Morphological Gradient (n-cupy)")
+@register_function(menu="Filtering / edge enhancement > Morphological Gradient (n-cupy)")
 @time_slicer
 @plugin_function
-def morphological_gradient(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Apply Laplace filter for edge detection / edge enhancement.
+    This is similar to applying a Gaussian-blur to an image and afterwards the gradient operator
+
+    Parameters
+    ----------
+    image: array-like
+        Image to detect edges in
+    radius: float
+        The filter will be applied with a kernel size of (radius * 2 + 1)
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Morphological_gradient
+    """
+
     from cupyx.scipy import ndimage
     return ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Morphological Laplace (n-cupy)")
+@register_function(menu="Filtering / edge enhancement > Morphological Laplace (n-cupy)")
 @time_slicer
 @plugin_function
-def morphological_laplace(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    import cupyx
+def morphological_laplace(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Apply Laplace filter for edge detection / edge enhancement.
+    This is similar to applying a Gaussian-blur to an image and afterwards the Laplace-operator
+
+    Parameters
+    ----------
+    image: array-like
+        Image to detect edges in
+    radius: float
+        The filter will be applied with a kernel size of (radius * 2 + 1)
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Laplace_operator
+    """
     from cupyx.scipy import ndimage
     return ndimage.morphological_laplace(image.astype(float), size=radius * 2 + 1)
 
@@ -140,7 +234,25 @@ def morphological_laplace(image: napari.types.ImageData, radius: float = 2, view
 @register_function(menu="Filtering / noise removal > Wiener (n-cupy)")
 @time_slicer
 @plugin_function
-def wiener(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
+def wiener(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Apply Wiener filter for noise-removal / denoising
+
+    Parameters
+    ----------
+    image: array-like
+        Image to denoise
+    radius: float
+        The filter will be applied with a kernel size of (radius * 2 + 1)
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Wiener_filter
+    """
     from cupyx.scipy import signal
     return signal.wiener(image.astype(float), radius * 2 + 1)
 
@@ -148,7 +260,17 @@ def wiener(image: napari.types.ImageData, radius: float = 2, viewer: napari.View
 @register_function(menu="Segmentation / binarization > Threshold (Otsu et al 1979, scikit-image, cupy)")
 @time_slicer
 @plugin_function
-def threshold_otsu(image: napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
+def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Applies Otsu's threshold selection method to an intensity image and returns a binary image with pixels==1 where
+    intensity is above the determined threshold.
+
+    See also
+    --------
+    .. [0] https://en.wikipedia.org/wiki/Otsu%27s_method
+    .. [1] https://ieeexplore.ieee.org/document/4310076
+    """
+
     # adapted from https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/pyclesperanto_prototype/_tier9/_threshold_otsu.py#L41
     import cupy
 
@@ -169,8 +291,19 @@ def threshold_otsu(image: napari.types.ImageData, viewer: napari.Viewer = None) 
 @register_function(menu="Segmentation post-processing > Binary fill holes (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_fill_holes(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    import cupyx
+def binary_fill_holes(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
+    """
+    Binary fill holes small holes in positive regions.
+
+    Parameters
+    ----------
+    binary_image: array-like
+        Binary image
+
+    Returns
+    -------
+    array-like: Binary image
+    """
     from cupyx.scipy import ndimage
     return ndimage.binary_fill_holes(binary_image)
 
@@ -178,8 +311,21 @@ def binary_fill_holes(binary_image: napari.types.LabelsData, viewer: napari.View
 @register_function(menu="Segmentation post-processing > Binary erosion (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    import cupyx
+def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    """
+    Binary erosion for shrinking positive regions
+
+    Parameters
+    ----------
+    binary_image: array-like
+        Binary image
+    iterations: int
+        The higher the iterations, the smaller will objects be.
+
+    Returns
+    -------
+    array-like: Binary image
+    """
     from cupyx.scipy import ndimage
     return ndimage.binary_erosion(binary_image, iterations=iterations, brute_force=True)
 
@@ -187,8 +333,21 @@ def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1, v
 @register_function(menu="Segmentation post-processing > Binary dilation (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    import cupyx
+def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    """
+    Binary dilation for expanding positive regions
+
+    Parameters
+    ----------
+    binary_image: array-like
+        Binary image
+    iterations: int
+        The higher the iterations, the larger will objects be.
+
+    Returns
+    -------
+    array-like: Binary image
+    """
     from cupyx.scipy import ndimage
     return ndimage.binary_dilation(binary_image, iterations=iterations, brute_force=True)
 
@@ -196,8 +355,21 @@ def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1, 
 @register_function(menu="Segmentation post-processing > Binary closing (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    import cupyx
+def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    """
+    Binary closing for removing single negative pixels and small holes in positive regions.
+
+    Parameters
+    ----------
+    binary_image: array-like
+        Binary image
+    iterations: int
+        The higher the iterations, the larger holes will be removed.
+
+    Returns
+    -------
+    array-like: Binary image
+    """
     from cupyx.scipy import ndimage
     return ndimage.binary_closing(binary_image, iterations=iterations, brute_force=True)
 
@@ -205,8 +377,21 @@ def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1, v
 @register_function(menu="Segmentation post-processing > Binary opening (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    import cupyx
+def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+    """
+    Binary opening for removing single positive pixels and small islands.
+
+    Parameters
+    ----------
+    binary_image: array-like
+        Binary image
+    iterations: int
+        The higher the iterations, the larger islands will be removed.
+
+    Returns
+    -------
+    array-like: Binary image
+    """
     from cupyx.scipy import ndimage
     return ndimage.binary_opening(binary_image, iterations=iterations, brute_force=True)
 
@@ -214,8 +399,19 @@ def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1, v
 @register_function(menu="Segmentation / labeling > Connected component labeling (n-cupy)")
 @time_slicer
 @plugin_function
-def label(binary_image: napari.types.LabelsData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
-    import cupyx
+def label(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
+    """
+    Connected component labeling to differentiate objects in binary images. Also known as instance segmentation.
+
+    Parameters
+    ----------
+    binary_image: array-like
+        Binary image with object pixels != 0 and background == 0 or False
+
+    Returns
+    -------
+    array-like: Label image of integer type
+    """
     from cupyx.scipy import ndimage
     result, _ = ndimage.label(binary_image)
     return result
