@@ -24,6 +24,9 @@ You can also call operations from python, e.g. as shown in this [demo notebook](
 ## Installation
 
 Follow the [instructions for installing cupy](https://docs.cupy.dev/en/stable/install.html#installing-cupy-from-conda-forge) on your computer first.
+
+    conda install -c conda-forge cupy
+
 Afterwards, you can install `napari-cupy-image-processing` via [pip]:
 
     pip install napari-cupy-image-processing

@@ -228,6 +228,9 @@ def measurements(intensity_image: napari.types.ImageData,
                  size: bool = True,
                  intensity: bool = True,
                  position: bool = False):
+
+    print("napari_cupy_image_processing.measurements is deprecated. Use napari-simpleitk-image-processing or napari-skimage-regionprops instead.")
+
     import cupy
     from cupyx.scipy import ndimage
 
