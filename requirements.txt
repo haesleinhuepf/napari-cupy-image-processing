@@ -7,7 +7,7 @@ toolz
 cupy
 napari-tools-menu
 scikit-image
-napari-time-slicer
+napari-time-slicer>=0.4.8
 napari-skimage-regionprops
 napari-assistant
 -e .
