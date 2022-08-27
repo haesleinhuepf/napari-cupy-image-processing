@@ -4,7 +4,6 @@ from functools import wraps
 from toolz import curry
 import inspect
 import numpy as np
-import napari
 from napari_tools_menu import register_function
 from napari_time_slicer import time_slicer
 
@@ -44,13 +43,15 @@ def plugin_function(
             return result
     worker_function.__module__ = "napari_cupy_image_processing"
 
-    return worker_function
+    from stackview import jupyter_displayable_output
+    return jupyter_displayable_output(worker_function, "n-cupy",
+                                      "https://www.napari-hub.org/plugins/napari-cupy-image-processing")
 
 
 @register_function(menu="Filtering / noise removal > Gaussian (n-cupy)")
 @time_slicer
 @plugin_function
-def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+def gaussian_filter(image: "napari.types.ImageData", sigma: float = 2) -> "napari.types.ImageData":
     """
     Apply Gaussian-blur to an image to locally average intensity (weighted) and remove noise.
 
@@ -76,7 +77,7 @@ def gaussian_filter(image: napari.types.ImageData, sigma: float = 2) -> napari.t
 @register_function(menu="Filtering / edge enhancement > Gaussian Laplace (n-cupy)")
 @time_slicer
 @plugin_function
-def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+def gaussian_laplace(image: "napari.types.ImageData", sigma: float = 2) -> "napari.types.ImageData":
     """
     Apply Laplace filter for edge detection / edge enhancement after applying a Gaussian-blur
 
@@ -102,7 +103,7 @@ def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.
 @register_function(menu="Filtering / noise removal > Median (n-cupy)")
 @time_slicer
 @plugin_function
-def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def median_filter(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     The median-filter allows removing noise from images. While locally averaging intensity, it
     is an edge-preserving filter.
@@ -117,7 +118,7 @@ def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.ty
 @register_function(menu="Filtering / noise removal > Percentile (n-cupy)")
 @time_slicer
 @plugin_function
-def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2) -> napari.types.ImageData:
+def percentile_filter(image: "napari.types.ImageData", percentile : float = 50, radius: float = 2) -> "napari.types.ImageData":
     """The percentile filter is similar to the median-filter but it allows specifying the percentile.
     The percentile-filter with percentile==50 is equal to the median-filter.
     """
@@ -128,7 +129,7 @@ def percentile_filter(image: napari.types.ImageData, percentile : float = 50, ra
 @register_function(menu="Filtering / background removal > White Top-hat (n-cupy)")
 @time_slicer
 @plugin_function
-def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def white_tophat(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     The white top-hat filter removes bright regions from an image showing black islands.
 
@@ -141,7 +142,7 @@ def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.typ
 @register_function(menu="Filtering / background removal > Black top-hat (n-cupy)")
 @time_slicer
 @plugin_function
-def black_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def black_tophat(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     The black top-hat filter removes bright regions from an image showing black islands.
     """
@@ -152,7 +153,7 @@ def black_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.typ
 @register_function(menu="Filtering / background removal > Minimum (n-cupy)")
 @time_slicer
 @plugin_function
-def minimum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def minimum_filter(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     Local minimum filter
     
@@ -165,7 +166,7 @@ def minimum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.t
 @register_function(menu="Filtering / background removal > Maximum (n-cupy)")
 @time_slicer
 @plugin_function
-def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def maximum_filter(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     Local maximum filter 
     
@@ -179,7 +180,7 @@ def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.t
 @register_function(menu="Filtering / edge enhancement > Morphological Gradient (n-cupy)")
 @time_slicer
 @plugin_function
-def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def morphological_gradient(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     Apply Laplace filter for edge detection / edge enhancement.
     This is similar to applying a Gaussian-blur to an image and afterwards the gradient operator
@@ -207,7 +208,7 @@ def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> 
 @register_function(menu="Filtering / edge enhancement > Morphological Laplace (n-cupy)")
 @time_slicer
 @plugin_function
-def morphological_laplace(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def morphological_laplace(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     Apply Laplace filter for edge detection / edge enhancement.
     This is similar to applying a Gaussian-blur to an image and afterwards the Laplace-operator
@@ -234,7 +235,7 @@ def morphological_laplace(image: napari.types.ImageData, radius: float = 2) -> n
 @register_function(menu="Filtering / noise removal > Wiener (n-cupy)")
 @time_slicer
 @plugin_function
-def wiener(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+def wiener(image: "napari.types.ImageData", radius: float = 2) -> "napari.types.ImageData":
     """
     Apply Wiener filter for noise-removal / denoising
 
@@ -260,7 +261,7 @@ def wiener(image: napari.types.ImageData, radius: float = 2) -> napari.types.Ima
 @register_function(menu="Segmentation / binarization > Threshold (Otsu et al 1979, scikit-image, cupy)")
 @time_slicer
 @plugin_function
-def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_otsu(image: "napari.types.ImageData") -> "napari.types.LabelsData":
     """
     Applies Otsu's threshold selection method to an intensity image and returns a binary image with pixels==1 where
     intensity is above the determined threshold.
@@ -291,7 +292,7 @@ def threshold_otsu(image: napari.types.ImageData) -> napari.types.LabelsData:
 @register_function(menu="Segmentation post-processing > Binary fill holes (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_fill_holes(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
+def binary_fill_holes(binary_image: "napari.types.LabelsData") -> "napari.types.LabelsData":
     """
     Binary fill holes small holes in positive regions.
 
@@ -311,7 +312,7 @@ def binary_fill_holes(binary_image: napari.types.LabelsData) -> napari.types.Lab
 @register_function(menu="Segmentation post-processing > Binary erosion (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+def binary_erosion(binary_image: "napari.types.LabelsData", iterations: int = 1) -> "napari.types.LabelsData":
     """
     Binary erosion for shrinking positive regions
 
@@ -333,7 +334,7 @@ def binary_erosion(binary_image: napari.types.LabelsData, iterations: int = 1) -
 @register_function(menu="Segmentation post-processing > Binary dilation (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+def binary_dilation(binary_image: "napari.types.LabelsData", iterations: int = 1) -> "napari.types.LabelsData":
     """
     Binary dilation for expanding positive regions
 
@@ -355,7 +356,7 @@ def binary_dilation(binary_image: napari.types.LabelsData, iterations: int = 1) 
 @register_function(menu="Segmentation post-processing > Binary closing (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+def binary_closing(binary_image: "napari.types.LabelsData", iterations: int = 1) -> "napari.types.LabelsData":
     """
     Binary closing for removing single negative pixels and small holes in positive regions.
 
@@ -377,7 +378,7 @@ def binary_closing(binary_image: napari.types.LabelsData, iterations: int = 1) -
 @register_function(menu="Segmentation post-processing > Binary opening (n-cupy)")
 @time_slicer
 @plugin_function
-def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1) -> napari.types.LabelsData:
+def binary_opening(binary_image: "napari.types.LabelsData", iterations: int = 1) -> "napari.types.LabelsData":
     """
     Binary opening for removing single positive pixels and small islands.
 
@@ -399,7 +400,7 @@ def binary_opening(binary_image: napari.types.LabelsData, iterations: int = 1) -
 @register_function(menu="Segmentation / labeling > Connected component labeling (n-cupy)")
 @time_slicer
 @plugin_function
-def label(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
+def label(binary_image: "napari.types.LabelsData") -> "napari.types.LabelsData":
     """
     Connected component labeling to differentiate objects in binary images. Also known as instance segmentation.
 
@@ -418,9 +419,9 @@ def label(binary_image: napari.types.LabelsData) -> napari.types.LabelsData:
 
 
 @register_function(menu="Measurement > Measurements (n-cupy)")
-def measurements(intensity_image: napari.types.ImageData,
-                 label_image: napari.types.LabelsData,
-                 napari_viewer : napari.Viewer = None,
+def measurements(intensity_image: "napari.types.ImageData",
+                 label_image: "napari.types.LabelsData",
+                 napari_viewer : "napari.Viewer" = None,
                  size: bool = True,
                  intensity: bool = True,
                  position: bool = False):
@@ -492,6 +493,7 @@ def measurements(intensity_image: napari.types.ImageData,
             return result
     else:
         warnings.warn("Image and labels must be set.")
+
 
 def _append_to_column(dictionary, column_name, value):
     if column_name not in dictionary.keys():
