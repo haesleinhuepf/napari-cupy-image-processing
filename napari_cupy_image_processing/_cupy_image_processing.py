@@ -44,7 +44,9 @@ def plugin_function(
             return result
     worker_function.__module__ = "napari_cupy_image_processing"
 
-    return worker_function
+    from stackview import jupyter_displayable_output
+    return jupyter_displayable_output(worker_function, "n-cupy",
+                                      "https://www.napari-hub.org/plugins/napari-cupy-image-processing")
 
 
 @register_function(menu="Filtering / noise removal > Gaussian (n-cupy)")

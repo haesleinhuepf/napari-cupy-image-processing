@@ -10,4 +10,5 @@ scikit-image
 napari-time-slicer>=0.4.8
 napari-skimage-regionprops
 napari-assistant
+stackview>=0.3.2
 -e .
