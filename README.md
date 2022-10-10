@@ -23,13 +23,13 @@ You can also call operations from python, e.g. as shown in this [demo notebook](
 
 ## Installation
 
-Follow the [instructions for installing cupy](https://docs.cupy.dev/en/stable/install.html#installing-cupy-from-conda-forge) on your computer first.
+You can install `napari-cupy-image-processing` using conda:
 
-    conda install -c conda-forge cupy
+    conda install -c conda-forge cupy cudatoolkit=11.2 napari-cupy-image-processing
 
-Afterwards, you can install `napari-cupy-image-processing` via [pip]:
+## Troubleshooting installation
 
-    pip install napari-cupy-image-processing
+In case of issues, follow the [instructions for installing cupy](https://docs.cupy.dev/en/stable/install.html#installing-cupy-from-conda-forge). 
 
 A more detailed example for installation (change 11.2 to your desired CUDA version):
 ```
