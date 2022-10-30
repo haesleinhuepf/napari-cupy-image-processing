@@ -33,10 +33,12 @@ In case of issues, follow the [instructions for installing cupy](https://docs.cu
 
 A more detailed example for installation (change 11.2 to your desired CUDA version):
 ```
-conda create --name cupy_p39 python=3.9
+mamba create --name cupy_p39 python=3.9 
 conda activate cupy_p39
-conda install -c conda-forge cupy cudatoolkit=11.2 napari
-pip install napari-cupy-image-processing
+```
+And then:
+```
+mamba install -c conda-forge cupy cudatoolkit=11.2 napari-cupy-image-processing
 ```
 
 ## Contributing
