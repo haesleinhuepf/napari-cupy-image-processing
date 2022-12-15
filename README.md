@@ -25,7 +25,7 @@ You can also call operations from python, e.g. as shown in this [demo notebook](
 
 You can install `napari-cupy-image-processing` using conda:
 
-    conda install -c conda-forge cupy cudatoolkit=11.2 napari-cupy-image-processing
+    mamba install -c conda-forge cupy cudatoolkit=11.2 napari-cupy-image-processing
 
 ## Troubleshooting installation
 
