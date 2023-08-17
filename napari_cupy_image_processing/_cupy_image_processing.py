@@ -15,6 +15,7 @@ def plugin_function(
     @wraps(function)
     def worker_function(*args, **kwargs):
         import cupy
+        from stackview._static_view import StackViewNDArray
 
         sig = inspect.signature(function)
         # create mapping from position and keyword arguments to parameters
@@ -25,8 +26,13 @@ def plugin_function(
         # https://docs.python.org/3/library/inspect.html#inspect.BoundArguments.apply_defaults
         bound.apply_defaults()
 
+        any_input_was_cupy = False
+
         # copy images to GPU, and create output array if necessary
         for key, value in bound.arguments.items():
+            if isinstance(value, cupy.ndarray):
+                any_input_was_cupy = True
+
             if isinstance(value, np.ndarray):
                 bound.arguments[key] = cupy.asarray(value)
             elif 'pyclesperanto_prototype._tier0._pycl.OCLArray' in str(type(value)) or \
@@ -37,15 +43,14 @@ def plugin_function(
         # call the decorated function
         result = function(*bound.args, **bound.kwargs)
 
-        if isinstance(result, cupy.ndarray):
-            return np.asarray(result.get())
+        if isinstance(result, cupy.ndarray) and not any_input_was_cupy:
+            return StackViewNDArray(np.asarray(result.get()), "n-cupy",
+                                      "https://www.napari-hub.org/plugins/napari-cupy-image-processing")
         else:
             return result
     worker_function.__module__ = "napari_cupy_image_processing"
 
-    from stackview import jupyter_displayable_output
-    return jupyter_displayable_output(worker_function, "n-cupy",
-                                      "https://www.napari-hub.org/plugins/napari-cupy-image-processing")
+    return worker_function
 
 
 @register_function(menu="Filtering / noise removal > Gaussian (n-cupy)")
